@@ -1,18 +1,75 @@
+
 <!DOCTYPE html>
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
     <title>Chatsong Uploader</title>
     <style>
-        body { font-family: sans-serif; padding: 50px; text-align: center; }
-        a { font-size: 20px; padding: 20px; background: #007bff; color: white; text-decoration: none; border-radius: 10px; display: inline-block; }
+        body { font-family: sans-serif; padding: 20px; text-align: center; }
+        #status { margin-top: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
     <h2>Chatsong Uploader</h2>
-    <p>Klik op de knop om de officiële, veilige uploader te openen:</p>
-    <br>
-    <a href="https://pixeldrain.com/upload" target="_blank">Video uploaden</a>
-    <p><small>Kopieer na het uploaden de link van het bestand en plak deze in je forumbericht.</small></p>
+    <input type="file" id="fileInput">
+    <button onclick="upload()">Uploaden naar account</button>
+    <div id="status"></div>
+
+    <script>
+        async function upload() {
+            const fileInput = document.getElementById('fileInput');
+            const status = document.getElementById('status');
+            const file = fileInput.files[0];
+            
+            // VUL HIER JE API KEY IN
+            const api_key = "6e7c41b3-da13-40c9-b404-e931b65685e6"; 
+
+            if (!file) { status.innerText = "Kies eerst een bestand!"; return; }
+            status.innerText = "Bezig met uploaden...";
+
+            try {
+                const resp = await fetch("https://pixeldrain.com/api/file/", {
+                    method: "POST",
+                    headers: {
+                        // De correcte Basic Auth methode voor Pixeldrain
+                        "Authorization": "Basic " + btoa(api_key + ":")
+                    },
+                    body: file
+                });
+
+                const data = await resp.json();
+
+                if (resp.status >= 200 && resp.status < 300) {
+                    status.innerHTML = `Gelukt! Bestand staat in je account.<br>
+                    Link: <a href="https://pixeldrain.com/u/${data.id}" target="_blank">Bekijk hier</a>`;
+                } else {
+                    // Hier zie je de precieze foutmelding als het misgaat
+                    status.innerText = "Fout (" + resp.status + "): " + JSON.stringify(data);
+                }
+            } catch (err) {
+                status.innerText = "Netwerkfout: " + err.message;
+            }
+        }
+    </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

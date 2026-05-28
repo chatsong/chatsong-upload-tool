@@ -1,1 +1,52 @@
 # chatsong-upload-tool
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Chatsong Uploader</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        input, button { padding: 10px; margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <h2>Chatsong Video/Audio Uploader</h2>
+    <input type="file" id="fileInput" accept="audio/*,video/*">
+    <button onclick="uploadFile()">Upload naar Chatsong</button>
+    <p id="status"></p>
+
+    <script>
+        async function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            const apiKey = "JOUW_API_KEY_HIER"; // Vul hier je key in
+
+            if (!file) {
+                alert("Kies eerst een bestand!");
+                return;
+            }
+
+            const status = document.getElementById('status');
+            status.innerText = "Bezig met uploaden...";
+
+            try {
+                const resp = await fetch("https://pixeldrain.com/api/file/", {
+                    method: "POST",
+                    headers: { "Authorization": "Basic " + btoa(":" + apiKey) },
+                    body: file
+                });
+
+                if (resp.status === 200) {
+                    const result = await resp.json();
+                    const fileUrl = "https://pixeldrain.com/u/" + result.id;
+                    status.innerHTML = "Gelukt! Deel deze link: <br><input value='" + fileUrl + "' readonly style='width: 300px;'>";
+                } else {
+                    status.innerText = "Fout: Controleer je API-key.";
+                }
+            } catch (error) {
+                status.innerText = "Er ging iets mis.";
+            }
+        }
+    </script>
+</body>
+</html>

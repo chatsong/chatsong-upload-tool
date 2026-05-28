@@ -3,35 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Chatsong Uploader</title>
+    <style>
+        body { font-family: sans-serif; padding: 50px; text-align: center; }
+        a { font-size: 20px; padding: 20px; background: #007bff; color: white; text-decoration: none; border-radius: 10px; display: inline-block; }
+    </style>
 </head>
 <body>
     <h2>Chatsong Uploader</h2>
-    <input type="file" id="fileInput">
-    <button onclick="upload()">Uploaden</button>
-    <div id="status"></div>
-
-    <script>
-        async function upload() {
-            const file = document.getElementById('fileInput').files[0];
-            const apiKey = "13617737-de28-4c26-8e07-511ab7fc1051"; // <--- VUL HIER JE API KEY IN
-            
-            document.getElementById('status').innerText = "Uploaden...";
-
-            const response = await fetch("https://pixeldrain.com/api/file/", {
-                method: "POST",
-                headers: {
-                    "Authorization": "Basic " + btoa(apiKey + ":")
-                },
-                body: file
-            });
-
-            const data = await response.json();
-            if (data.success) {
-                document.getElementById('status').innerText = "Succes! Link: https://pixeldrain.com/u/" + data.id;
-            } else {
-                document.getElementById('status').innerText = "Fout: " + JSON.stringify(data);
-            }
-        }
-    </script>
+    <p>Klik op de knop om de officiële, veilige uploader te openen:</p>
+    <br>
+    <a href="https://pixeldrain.com/upload" target="_blank">Video uploaden</a>
+    <p><small>Kopieer na het uploaden de link van het bestand en plak deze in je forumbericht.</small></p>
 </body>
 </html>

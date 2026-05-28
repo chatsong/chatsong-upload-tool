@@ -1,22 +1,18 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatsong Uploader</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; text-align: center; }
-        form { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
-        input, button { padding: 15px; margin: 10px 0; width: 100%; box-sizing: border-box; }
-        button { background: #007bff; color: white; border: none; cursor: pointer; }
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { width: 90%; max-width: 500px; text-align: center; }
     </style>
 </head>
 <body>
-    <h2>Chatsong Video-Reply</h2>
-    <form action="https://pixeldrain.com/api/file/" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" accept="video/*,audio/*" capture="environment" required>
-        <button type="submit">Uploaden</button>
-    </form>
-    <p><small>Let op: Na het klikken word je doorgestuurd naar een resultaatpagina van Pixeldrain.</small></p>
+    <div class="container">
+        <h2>Chatsong Video-Reply</h2>
+        <!-- Dit gebruikt de officiële Pixeldrain upload-widget -->
+        <iframe src="https://pixeldrain.com/upload" width="100%" height="400" frameborder="0"></iframe>
+        <p><small>Volg de instructies in het venster hierboven.</small></p>
+    </div>
 </body>
 </html>

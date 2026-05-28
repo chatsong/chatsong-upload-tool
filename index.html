@@ -1,18 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="nl">
 <head>
+    <meta charset="UTF-8">
     <title>Chatsong Uploader</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .container { width: 90%; max-width: 500px; text-align: center; }
+        body { font-family: sans-serif; padding: 20px; text-align: center; }
+        input, button { padding: 15px; margin: 10px 0; width: 100%; border-radius: 5px; }
+        button { background: #d9534f; color: white; border: none; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Chatsong Video-Reply</h2>
-        <!-- Dit gebruikt de officiële Pixeldrain upload-widget -->
-        <iframe src="https://pixeldrain.com/upload" width="100%" height="400" frameborder="0"></iframe>
-        <p><small>Volg de instructies in het venster hierboven.</small></p>
-    </div>
+    <h2>Chatsong Beveiligde Uploader</h2>
+    <input type="file" id="fileInput">
+    <button onclick="uploadFile()">Upload via Proxy</button>
+    <div id="status"></div>
+
+    <script>
+        async function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            const status = document.getElementById('status');
+            
+            // JE API KEY HIER
+            const apiKey = "13617737-de28-4c26-8e07-511ab7fc1051"; 
+
+            if (!file) { alert("Kies een bestand!"); return; }
+            status.innerText = "Bezig met uploaden via proxy...";
+
+            try {
+                // We sturen het verzoek via een proxy om de blokkade te omzeilen
+                const response = await fetch("https://corsproxy.io/?https://pixeldrain.com/api/file/", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": "Basic " + btoa(apiKey + ":")
+                    },
+                    body: file
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    status.innerHTML = "Gelukt! Link: <a href='https://pixeldrain.com/u/"+data.id+"' target='_blank'>Klik hier</a>";
+                } else {
+                    status.innerText = "Serverfout: " + JSON.stringify(data);
+                }
+            } catch (err) {
+                status.innerText = "Proxy Fout: " + err.message;
+            }
+        }
+    </script>
 </body>
 </html>

@@ -5,47 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatsong Uploader</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; max-width: 400px; margin: auto; text-align: center; }
-        input, button { padding: 15px; margin: 10px 0; width: 100%; border-radius: 5px; box-sizing: border-box; }
-        button { background: #007bff; color: white; border: none; cursor: pointer; font-size: 16px; }
+        body { font-family: sans-serif; padding: 20px; text-align: center; }
+        form { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
+        input, button { padding: 15px; margin: 10px 0; width: 100%; box-sizing: border-box; }
+        button { background: #007bff; color: white; border: none; cursor: pointer; }
     </style>
 </head>
 <body>
     <h2>Chatsong Video-Reply</h2>
-    <p>Neem een video op of kies een fragment.</p>
-    
-    <input type="file" id="fileInput" accept="video/*,audio/*" capture="environment">
-    
-    <button onclick="uploadFile()">Upload mijn Reply</button>
-    <div id="status"></div>
-
-    <script>
-        async function uploadFile() {
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
-            const status = document.getElementById('status');
-            
-            if (!file) { alert("Selecteer eerst een bestand!"); return; }
-            status.innerText = "Bezig met uploaden...";
-
-            try {
-                const resp = await fetch("https://pixeldrain.com/api/file/", {
-                    method: "POST",
-                    body: file
-                });
-
-                if (resp.ok) {
-                    const data = await resp.json();
-                    const link = "https://pixeldrain.com/u/" + data.id;
-                    status.innerHTML = `Gelukt! <br> <b>Deel deze link op het forum:</b><br>
-                    <input value='${link}' readonly style='width:90%; padding:10px; margin-top:10px; text-align:center;'>`;
-                } else {
-                    status.innerText = "Fout bij uploaden: " + resp.status;
-                }
-            } catch (err) {
-                status.innerText = "Verbindingsfout.";
-            }
-        }
-    </script>
+    <form action="https://pixeldrain.com/api/file/" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept="video/*,audio/*" capture="environment" required>
+        <button type="submit">Uploaden</button>
+    </form>
+    <p><small>Let op: Na het klikken word je doorgestuurd naar een resultaatpagina van Pixeldrain.</small></p>
 </body>
 </html>

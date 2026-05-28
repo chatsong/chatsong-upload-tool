@@ -1,33 +1,40 @@
-# chatsong-upload-tool
 <!DOCTYPE html>
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>Chatsong Uploader</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatsong Video & Audio Reply</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; }
-        input, button { padding: 10px; margin: 5px 0; }
+        body { font-family: sans-serif; padding: 20px; text-align: center; }
+        .container { max-width: 400px; margin: auto; }
+        input, button { padding: 15px; margin: 10px 0; width: 100%; box-sizing: border-box; }
+        button { background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
-    <h2>Chatsong Video/Audio Uploader</h2>
-    <input type="file" id="fileInput" accept="audio/*,video/*">
-    <button onclick="uploadFile()">Upload naar Chatsong</button>
-    <p id="status"></p>
+    <div class="container">
+        <h2>Chatsong Reply</h2>
+        <p>Neem een video of audio op om direct te reageren!</p>
+        
+        <input type="file" id="fileInput" accept="video/*,audio/*" capture="user">
+        
+        <button onclick="uploadFile()">Upload & Deel mijn Reply</button>
+        <p id="status"></p>
+    </div>
 
     <script>
         async function uploadFile() {
             const fileInput = document.getElementById('fileInput');
             const file = fileInput.files[0];
-            const apiKey = "6e7c41b3-da13-40c9-b404-e931b65685e6"; // Vul hier je key in
+            const apiKey = "6e7c41b3-da13-40c9-b404-e931b65685e6"; // Vergeet niet je key hier in te vullen!
 
             if (!file) {
-                alert("Kies eerst een bestand!");
+                alert("Kies eerst een bestand of neem op met je camera!");
                 return;
             }
 
             const status = document.getElementById('status');
-            status.innerText = "Bezig met uploaden...";
+            status.innerText = "Bezig met uploaden, even geduld...";
 
             try {
                 const resp = await fetch("https://pixeldrain.com/api/file/", {
@@ -39,9 +46,9 @@
                 if (resp.status === 200) {
                     const result = await resp.json();
                     const fileUrl = "https://pixeldrain.com/u/" + result.id;
-                    status.innerHTML = "Gelukt! Deel deze link: <br><input value='" + fileUrl + "' readonly style='width: 300px;'>";
+                    status.innerHTML = "Gelukt! Kopieer deze link en plak hem in je forum-bericht:<br><br><input value='" + fileUrl + "' readonly style='width: 100%; text-align:center;'>";
                 } else {
-                    status.innerText = "Fout: Controleer je API-key.";
+                    status.innerText = "Fout bij uploaden.";
                 }
             } catch (error) {
                 status.innerText = "Er ging iets mis.";
